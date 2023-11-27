@@ -6,9 +6,11 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\maestro\Engine\MaestroEngine;
 use Drupal\maestro_webform\Plugin\EngineTasks\MaestroWebformTask;
+use Drupal\os2forms_forloeb\Plugin\WebformHandler\MaestroNotificationHandler;
 use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Utility\WebformArrayHelper;
+use phpDocumentor\Reflection\Types\Self_;
 
 /**
  * Maestro Webform Task Plugin for Multiple Submissions.
@@ -19,7 +21,8 @@ use Drupal\webform\Utility\WebformArrayHelper;
  * )
  */
 class MaestroWebformInheritTask extends MaestroWebformTask {
-  public const INHERIT_WEBFORM_UNIQUE_ID = 'inherit_webform_unique_id';
+  const INHERIT_WEBFORM_UNIQUE_ID = 'inherit_webform_unique_id';
+  const INHERIT_WEBFORM_NOTIFICATION_HANDLERS = 'inherit_webform_notification_handlers';
 
   /**
    * Constructor.
@@ -91,6 +94,44 @@ class MaestroWebformInheritTask extends MaestroWebformTask {
       '#required' => TRUE,
       '#empty_option' => $this->t('Select task'),
     ];
+// header('content-type: text/plain'); echo var_export($task, true); die(__FILE__.':'.__LINE__.':'.__METHOD__);
+
+    if ($uniqueId = ($task['data'][self::INHERIT_WEBFORM_UNIQUE_ID] ?? NULL)) {
+      if ('submission' === $uniqueId) {
+        // Get webforms triggering this work flow.
+        $notificationWebforms = [];
+      }
+      else {
+        // Get webform form task with the unique id.
+        $notificationWebforms = [];
+      }
+      if (!empty($inheritFromWebforms)) {
+        $notificationHandlers = [];
+        foreach ($notificationHandlers as $webform) {
+          foreach ($webform->getHandlers() as $handler) {
+            if ($handler instanceof MaestroNotificationHandler) {
+              $notificationHandlers[] = $handler;
+            }
+          }
+        }
+
+        if (!empty($notificationHandlers)) {
+          $form[self::INHERIT_WEBFORM_NOTIFICATION_HANDLERS] = [
+            '#type' => 'checkboxes',
+            '#options' => ['submission' => $this->t('Start')]
+              + array_map(
+                static fn(array $task) => sprintf('%s (%s)', $task['label'], $task['data']['unique_id'] ?? $task['id']),
+                $webformTasksByUniqueId
+              ),
+            '#title' => $this->t('Notification handlers'),
+            // '#description' => $this->t('Put the unique identifier of the webform you want to inherit from (start-task=submission'),
+            '#default_value' => $task['data'][self::INHERIT_WEBFORM_NOTIFICATION_HANDLERS] ?? [],
+            '#empty_option' => $this->t('Select notification handlers'),
+          ];
+        }
+      }
+    }
+
     return $form;
   }
 
