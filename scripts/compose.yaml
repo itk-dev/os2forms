@@ -2,7 +2,8 @@
 
 services:
   drupal:
-    image: drupal:10-apache
+    # image: drupal:10-apache
+    build: .
     ports:
       - 80
     volumes:
