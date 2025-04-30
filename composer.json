@@ -12,6 +12,7 @@
         "drupal/admin_toolbar": "^3.0",
         "drupal/advancedqueue": "^1.0",
         "drupal/cache_control_override": "^1.1 || ^2.0",
+        "drupal/ckeditor": "^1.0",
         "drupal/clientside_validation": "^4.0",
         "drupal/coc_forms_auto_export": "^3.0@alpha",
         "drupal/config_entity_revisions": "2.0.x-dev",
