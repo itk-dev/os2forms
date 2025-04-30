@@ -100,7 +100,8 @@
             "simplesamlphp/composer-module-installer": true,
             "simplesamlphp/composer-xmlprovider-installer": true,
             "vaimo/composer-patches": true,
-            "zaporylie/composer-drupal-optimizations": true
+            "zaporylie/composer-drupal-optimizations": true,
+            "simplesamlphp/composer-xmlprovider-installer": true
         },
         "sort-packages": true
     },
