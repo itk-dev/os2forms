@@ -13,6 +13,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## Patch release selvbetjening 4.7.0
 
+- [PR-222](https://github.com/OS2Forms/os2forms/pull/222)
+  - Correctly sets sender label on Maestro digital post notifications.
+
 ## Patch release selvbetjening 4.6.0
 
 - [PR-189](https://github.com/OS2Forms/os2forms/pull/189)
