@@ -21,6 +21,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   - Fix bug in MitidChildrenSelectAjaxBehaviour.php
 - [PR-187](https://github.com/OS2Forms/os2forms/pull/187)
   - Avoid double-saving submissions when handling name and address protection.
+- [PR-184](https://github.com/OS2Forms/os2forms/pull/184)
+  - Patches `coc_forms_auto_export` to ensure settings can be saved upon initial
+    attempt, cf. [Unable to save initial settings due to unfocusable form control](https://www.drupal.org/project/coc_forms_auto_export/issues/3531004)
 
 ## Patch release selvbetjening 4.6.0
 
