@@ -15,6 +15,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - [PR-222](https://github.com/OS2Forms/os2forms/pull/222)
   - Correctly sets sender label on Maestro digital post notifications.
+- [PR-215](https://github.com/OS2Forms/os2forms/pull/215)
+  - Added condition to maestro notification submission handler
 
 ## Patch release selvbetjening 4.6.0
 
