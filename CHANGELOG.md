@@ -11,6 +11,22 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+## Patch release selvbetjening 4.7.0
+
+- [PR-222](https://github.com/OS2Forms/os2forms/pull/222)
+  - Correctly sets sender label on Maestro digital post notifications.
+- [PR-215](https://github.com/OS2Forms/os2forms/pull/215)
+  - Added condition to maestro notification submission handler
+- [PR-192](https://github.com/OS2Forms/os2forms/pull/192)
+  - Fix bug in MitidChildrenSelectAjaxBehaviour.php
+- [PR-187](https://github.com/OS2Forms/os2forms/pull/187)
+  - Avoid double-saving submissions when handling name and address protection.
+- [PR-184](https://github.com/OS2Forms/os2forms/pull/184)
+  - Patches `coc_forms_auto_export` to ensure settings can be saved upon initial
+    attempt, cf. [Unable to save initial settings due to unfocusable form control](https://www.drupal.org/project/coc_forms_auto_export/issues/3531004)
+
+## Patch release selvbetjening 4.6.0
+
 - [PR-189](https://github.com/OS2Forms/os2forms/pull/189)
   - Added support for MeMo 1.2 and added additional validation of MeMo actions.
 - [PR-202](https://github.com/OS2Forms/os2forms/pull/202)
