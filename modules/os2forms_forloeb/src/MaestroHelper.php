@@ -316,8 +316,6 @@ class MaestroHelper implements LoggerInterface {
    *   The webform submission.
    * @param string $notificationType
    *   The notification type (one of the NOTIFICATION_* constants).
-   * @param string $senderLabel
-   *   The sender label.
    */
   private function sendNotificationEmail(
     string $recipient,
@@ -382,7 +380,9 @@ class MaestroHelper implements LoggerInterface {
    * @param \Drupal\webform\WebformSubmissionInterface $submission
    *   The webform submission.
    * @param string $notificationType
-   *   The notification type (one of the NOTIFICATION_* constannts).
+   *   The notification type (one of the NOTIFICATION_* constants).
+   * @param string $senderLabel
+   *   The sender label.
    */
   private function sendNotificationDigitalPost(
     string $recipient,
