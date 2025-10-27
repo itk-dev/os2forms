@@ -17,6 +17,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   - Correctly sets sender label on Maestro digital post notifications.
 - [PR-215](https://github.com/OS2Forms/os2forms/pull/215)
   - Added condition to maestro notification submission handler
+- [PR-192](https://github.com/OS2Forms/os2forms/pull/192)
+  - Fix bug in MitidChildrenSelectAjaxBehaviour.php
 
 ## Patch release selvbetjening 4.6.0
 
