@@ -19,6 +19,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   - Added condition to maestro notification submission handler
 - [PR-192](https://github.com/OS2Forms/os2forms/pull/192)
   - Fix bug in MitidChildrenSelectAjaxBehaviour.php
+- [PR-187](https://github.com/OS2Forms/os2forms/pull/187)
+  - Avoid double-saving submissions when handling name and address protection.
 
 ## Patch release selvbetjening 4.6.0
 
