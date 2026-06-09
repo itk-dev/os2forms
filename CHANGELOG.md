@@ -13,6 +13,9 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - [PR-315](https://github.com/OS2Forms/os2forms/pull/315)
   Added “Display on“ options to Map element
+
+## [5.1.0]
+
 - [PR-326](https://github.com/OS2Forms/os2forms/pull/326)
   Updating ckeditor -> ckeditor5.
 - [PR-322](https://github.com/OS2Forms/os2forms/pull/322)
