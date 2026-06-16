@@ -2,6 +2,7 @@
 
 namespace Drupal\os2forms_digital_signature\Service;
 
+use Drupal\webform\WebformSubmissionInterface;
 use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\ImmutableConfig;
@@ -254,6 +255,21 @@ class SigningService {
     }
 
     return $url;
+  }
+
+  /**
+   * Configure the webform submission as draft.
+   */
+  public function setDraft(WebformSubmissionInterface $webform_submission) {
+    $webform_submission->set('in_draft', TRUE);
+  }
+
+  /**
+   * Configure the webform submission as completed.
+   */
+  public function setCompleted(WebformSubmissionInterface $webformSubmission) {
+    $webformSubmission->set('in_draft', FALSE);
+    $webformSubmission->setCompletedTime(time());
   }
 
 }

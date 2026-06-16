@@ -11,6 +11,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
+- Made submission have state draft during digital signature flow.
 - [PR-315](https://github.com/OS2Forms/os2forms/pull/315)
   Added “Display on“ options to Map element
 

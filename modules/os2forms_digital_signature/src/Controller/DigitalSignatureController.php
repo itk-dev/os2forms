@@ -136,6 +136,8 @@ class DigitalSignatureController extends ControllerBase {
       $this->fileSystem->saveData($signedFileContent, $expectedFileUri, FileExists::Replace);
 
       // Updating webform submission.
+      $this->signingService->setCompleted($webformSubmission);
+
       $webformSubmission->setLocked(TRUE);
       $webformSubmission->save();
 
