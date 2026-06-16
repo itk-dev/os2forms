@@ -219,7 +219,7 @@ final class WebformHandlerSF1601 extends WebformHandlerBase {
     $states = (array) ($this->configuration[self::ADDITIONAL][self::STATES] ?? NULL);
     $form[self::ADDITIONAL][self::STATES] = [
       '#type' => 'checkboxes',
-      '#title' => $this->t('Send digital post when …'),
+      '#title' => $this->t('Run handler when …'),
       '#options' => [
         WebformSubmissionInterface::STATE_DRAFT_CREATED => $this->t('<b>draft is created</b>.'),
         WebformSubmissionInterface::STATE_DRAFT_UPDATED => $this->t('<b>draft is updated</b>.'),
