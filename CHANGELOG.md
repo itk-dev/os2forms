@@ -13,6 +13,8 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 - Added the ability to configure on which submission states digital post
   should be sent.
+  - Added an update hook to set states config to completed on existing
+    digital post handlers.
 - Made submission have state draft during digital signature flow.
 - [PR-315](https://github.com/OS2Forms/os2forms/pull/315)
   Added “Display on“ options to Map element

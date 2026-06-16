@@ -26,3 +26,31 @@ function os2forms_digital_post_update_9001(): void {
     'os2web_key',
   ], TRUE);
 }
+
+/**
+ * Set states config to completed on existing digital post handlers.
+ */
+function os2forms_digital_post_update_10001(): void {
+  $configFactory = \Drupal::configFactory();
+
+  foreach ($configFactory->listAll('webform.webform.') as $name) {
+    $config = $configFactory->getEditable($name);
+    $handlers = $config->get('handlers');
+    if (!is_array($handlers)) {
+      continue;
+    }
+
+    $changed = FALSE;
+    foreach ($handlers as $handlerId => $handler) {
+      if (($handler['id'] ?? NULL) !== 'digital_post_sf1601') {
+        continue;
+      }
+      $handlers[$handlerId]['settings']['additional']['states'] = ['completed'];
+      $changed = TRUE;
+    }
+
+    if ($changed) {
+      $config->set('handlers', $handlers)->save();
+    }
+  }
+}
