@@ -260,6 +260,8 @@ class SigningService {
   /**
    * Configure the webform submission as draft.
    *
+   * This is the complementary function to setSubmissionCompleted.
+   *
    * @param \Drupal\webform\WebformSubmissionInterface $webformSubmission
    *   A webform submission.
    */
@@ -270,6 +272,8 @@ class SigningService {
 
   /**
    * Configure the webform submission as completed.
+   *
+   * This is the complementary function to setSubmissionDraft.
    *
    * @param \Drupal\webform\WebformSubmissionInterface $webformSubmission
    *   A webform submission.
