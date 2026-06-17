@@ -11,10 +11,10 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
-- Added the ability to configure on which submission states digital post
-  should be sent.
-  - Added an update hook to set states config to completed on existing
-    digital post handlers.
+- Added the ability to configure on which submission states handlers should run.
+  The default option is to run on the completed state. Changes was made to the
+  following handlers:
+  - Digital post
 - Made submission have state draft during digital signature flow.
 - [PR-315](https://github.com/OS2Forms/os2forms/pull/315)
   Added “Display on“ options to Map element
