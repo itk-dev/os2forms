@@ -6,6 +6,7 @@
  */
 
 use Drupal\os2forms_digital_post\Helper\BeskedfordelerHelper;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Implements hook_schema().
@@ -31,6 +32,7 @@ function os2forms_digital_post_update_9001(): void {
  * Set states config to completed on existing digital post handlers.
  */
 function os2forms_digital_post_update_10001(): void {
+  // To avoid having to load full webforms we load and update webform configs.
   $configFactory = \Drupal::configFactory();
 
   foreach ($configFactory->listAll('webform.webform.') as $name) {
@@ -45,7 +47,7 @@ function os2forms_digital_post_update_10001(): void {
       if (($handler['id'] ?? NULL) !== 'digital_post_sf1601') {
         continue;
       }
-      $handlers[$handlerId]['settings']['additional']['states'] = ['completed'];
+      $handlers[$handlerId]['settings']['additional']['states'] = [WebformSubmissionInterface::STATE_COMPLETED];
       $changed = TRUE;
     }
 
