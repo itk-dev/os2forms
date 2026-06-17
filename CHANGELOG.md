@@ -15,6 +15,7 @@ before starting to add changes. Use example [placed in the end of the page](#exa
   The default option is to run on the completed state. Changes was made to the
   following handlers:
   - Digital post
+  - Fasit
 - Made submission have state draft during digital signature flow.
 - [PR-315](https://github.com/OS2Forms/os2forms/pull/315)
   Added “Display on“ options to Map element
