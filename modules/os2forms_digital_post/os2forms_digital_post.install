@@ -43,11 +43,13 @@ function os2forms_digital_post_update_10001(): void {
     }
 
     $changed = FALSE;
-    foreach ($handlers as $handlerId => $handler) {
+
+    foreach ($handlers as $handlerKey => $handler) {
+      // $handler['id'] is the handler plugin id.
       if (($handler['id'] ?? NULL) !== 'digital_post_sf1601') {
         continue;
       }
-      $handlers[$handlerId]['settings']['additional']['states'] = [WebformSubmissionInterface::STATE_COMPLETED];
+      $handlers[$handlerKey]['settings']['additional']['states'] = [WebformSubmissionInterface::STATE_COMPLETED];
       $changed = TRUE;
     }
 

@@ -259,17 +259,24 @@ class SigningService {
 
   /**
    * Configure the webform submission as draft.
+   *
+   * @param \Drupal\webform\WebformSubmissionInterface $webformSubmission
+   *   A webform submission.
    */
-  public function setDraft(WebformSubmissionInterface $webform_submission) {
-    $webform_submission->set('in_draft', TRUE);
+  public function setSubmissionDraft(WebformSubmissionInterface $webformSubmission): void {
+    $webformSubmission->set('in_draft', TRUE);
+    $webformSubmission->setCompletedTime(0);
   }
 
   /**
    * Configure the webform submission as completed.
+   *
+   * @param \Drupal\webform\WebformSubmissionInterface $webformSubmission
+   *   A webform submission.
    */
-  public function setCompleted(WebformSubmissionInterface $webformSubmission) {
+  public function setSubmissionCompleted(WebformSubmissionInterface $webformSubmission): void {
     $webformSubmission->set('in_draft', FALSE);
-    $webformSubmission->setCompletedTime(time());
+    $webformSubmission->setCompletedTime($this->time->getRequestTime());
   }
 
 }

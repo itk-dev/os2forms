@@ -115,7 +115,7 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
       return;
     }
 
-    $this->signingService->setDraft($webform_submission);
+    $this->signingService->setSubmissionDraft($webform_submission);
 
     $attachment = $this->getSubmissionAttachment($webform_submission);
     if (!$attachment) {
