@@ -264,6 +264,8 @@ class SigningService {
    *
    * @param \Drupal\webform\WebformSubmissionInterface $webformSubmission
    *   A webform submission.
+   *
+   * @see self::setSubmissionCompleted()
    */
   public function setSubmissionDraft(WebformSubmissionInterface $webformSubmission): void {
     $webformSubmission->set('in_draft', TRUE);
@@ -277,6 +279,8 @@ class SigningService {
    *
    * @param \Drupal\webform\WebformSubmissionInterface $webformSubmission
    *   A webform submission.
+   *
+   * @see self::setSubmissionDraft()
    */
   public function setSubmissionCompleted(WebformSubmissionInterface $webformSubmission): void {
     $webformSubmission->set('in_draft', FALSE);
