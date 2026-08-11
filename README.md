@@ -1,5 +1,20 @@
 # OS2Forms Drupal module  [![Build Status](https://travis-ci.org/OS2Forms/os2forms.svg?branch=8.x)](https://travis-ci.org/OS2Forms/os2forms)
 
+<details>
+<summary>Fordelingskomponenten</summary>
+
+### Production (dev)
+
+* <https://getcomposer.org/doc/03-cli.md#repository-repo>
+
+``` shell name=fordelingskomponenten-require-prod
+git fetch
+git reset --hard origin/develop
+git merge --no-ff origin/feature/add-first-middle-and-last-name-nemid-elements -m "Merge remote-tracking branch 'origin/feature/add-first-middle-and-last-name-nemid-elements' into feature/fordelingskomponent"
+```
+
+</details>
+
 ## Install
 
 OS2Forms Drupal 10 module is available to download via composer.
