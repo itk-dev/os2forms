@@ -107,12 +107,12 @@
             "vaimo/composer-patches": true,
             "zaporylie/composer-drupal-optimizations": true
         },
-        "sort-packages": true,
         "policy": {
             "advisories": {
                 "block": false
             }
-        }
+        },
+        "sort-packages": true
     },
     "extra": {
         "composer-exit-on-patch-failure": false,
