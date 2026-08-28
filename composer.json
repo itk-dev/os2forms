@@ -56,7 +56,7 @@
         "itk-dev/serviceplatformen": "^1.7.1",
         "mglaman/composer-drupal-lenient": "^1.0",
         "os2web/os2web_audit": "^1.0",
-        "os2web/os2web_datalookup": "^3.0",
+        "os2web/os2web_datalookup": "dev-selvbetjening.aarhuskommune.dk as 3.4.0",
         "os2web/os2web_key": "^1.0",
         "os2web/os2web_nemlogin": "^1.0",
         "os2web/os2web_simplesaml": "dev-master",
@@ -76,16 +76,23 @@
         "phpunit/phpunit": "^9.5",
         "wsdltophp/packagegenerator": "^4.0"
     },
-    "repositories": {
-        "drupal": {
+    "repositories": [
+        {
+            "name": "os2web/os2web_datalookup",
+            "type": "vcs",
+            "url": "https://github.com/itk-dev/os2web_datalookup"
+        },
+        {
+            "name": "drupal",
             "type": "composer",
             "url": "https://packages.drupal.org/8"
         },
-        "assets": {
+        {
+            "name": "assets",
             "type": "composer",
             "url": "https://asset-packagist.org"
         }
-    },
+    ],
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
@@ -99,6 +106,11 @@
             "simplesamlphp/composer-xmlprovider-installer": true,
             "vaimo/composer-patches": true,
             "zaporylie/composer-drupal-optimizations": true
+        },
+        "policy": {
+            "advisories": {
+                "block": false
+            }
         },
         "sort-packages": true
     },
