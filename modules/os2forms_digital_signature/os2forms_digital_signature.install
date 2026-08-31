@@ -53,7 +53,7 @@ function os2forms_digital_signature_update_10001(): void {
  *
  * Processes the webforms in batches of 25 via the update sandbox.
  */
-function os2forms_digital_signature_update_10001(&$sandbox) {
+function os2forms_digital_signature_update_10002(&$sandbox) {
   $logger = \Drupal::logger('os2forms_digital_signature');
 
   if (!isset($sandbox['ids'])) {
