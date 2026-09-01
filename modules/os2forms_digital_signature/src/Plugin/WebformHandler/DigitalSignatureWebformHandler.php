@@ -90,24 +90,21 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
    */
   private readonly Settings $settings;
 
-  private const string ADDITIONAL = 'additional';
-  private const string STATES = 'states';
-
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-      $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
-      $instance->moduleHandler = $container->get('module_handler');
-      $instance->elementManager = $container->get('plugin.manager.webform.element');
-      $instance->logger = $container->get('logger.channel.os2forms_digital_signature');
-      $instance->fileSystem = $container->get('file_system');
-      $instance->fileRepository = $container->get('file.repository');
-      $instance->fileUrlGenerator = $container->get('file_url_generator');
-      $instance->signingService = $container->get('os2forms_digital_signature.signing_service');
-      $instance->settings = $container->get('settings');
+    $instance = parent::create($container, $configuration, $plugin_id, $plugin_definition);
+    $instance->moduleHandler = $container->get('module_handler');
+    $instance->elementManager = $container->get('plugin.manager.webform.element');
+    $instance->logger = $container->get('logger.channel.os2forms_digital_signature');
+    $instance->fileSystem = $container->get('file_system');
+    $instance->fileRepository = $container->get('file.repository');
+    $instance->fileUrlGenerator = $container->get('file_url_generator');
+    $instance->signingService = $container->get('os2forms_digital_signature.signing_service');
+    $instance->settings = $container->get('settings');
 
-      return $instance;
+    return $instance;
   }
 
   /**
@@ -117,9 +114,6 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
     return [
       'attachment_element' => '',
       'signature_position' => Os2formsAttachmentPrintBuilder::SIGNATURE_POSITION_AFTER_CONTENT,
-      self::ADDITIONAL => [
-          self::STATES => [WebformSubmissionInterface::STATE_COMPLETED],
-      ],
     ];
   }
 
@@ -152,33 +146,7 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
       '#default_value' => $this->configuration['signature_position'],
     ];
 
-      // Additional.
-      // Lifted from EmailWebformHandler::buildConfigurationForm().
-      $resultsDisabled = (bool) $this->getWebform()->getSetting('results_disabled');
-      $form[self::ADDITIONAL] = [
-          '#type' => 'fieldset',
-          '#title' => $this->t('Additional settings'),
-      ];
-      // Settings: States.
-      $states = (array) ($this->configuration[self::ADDITIONAL][self::STATES] ?? NULL);
-      $form[self::ADDITIONAL][self::STATES] = [
-          '#type' => 'checkboxes',
-          '#title' => $this->t('Run handler when …'),
-          '#options' => [
-              WebformSubmissionInterface::STATE_DRAFT_CREATED => $this->t('<b>draft is created</b>.'),
-              WebformSubmissionInterface::STATE_DRAFT_UPDATED => $this->t('<b>draft is updated</b>.'),
-              WebformSubmissionInterface::STATE_CONVERTED => $this->t('anonymous <b>submission is converted</b> to authenticated.'),
-              WebformSubmissionInterface::STATE_COMPLETED => $this->t('<b>submission is completed</b>.'),
-              WebformSubmissionInterface::STATE_UPDATED => $this->t('<b>submission is updated</b>.'),
-              WebformSubmissionInterface::STATE_DELETED => $this->t('<b>submission is deleted</b>.'),
-              // The digital signature logic locks after the first signing. Resigning
-              // does not make sense, so 'locked' is not an option here.
-          ],
-          '#access' => !$resultsDisabled,
-          '#default_value' => $resultsDisabled ? [WebformSubmissionInterface::STATE_COMPLETED] : $states,
-      ];
-
-      return $this->setSettingsParents($form);
+    return $this->setSettingsParents($form);
   }
 
   /**
@@ -191,11 +159,6 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
     $this->configuration['attachment_element'] = $values['attachment_element'] ?? '';
     $this->configuration['signature_position'] = $values['signature_position']
       ?? Os2formsAttachmentPrintBuilder::SIGNATURE_POSITION_AFTER_CONTENT;
-
-    $additional = $form_state->getValue(self::ADDITIONAL);
-    // Clean up states.
-    $additional[self::STATES] = array_values(array_filter($additional[self::STATES]));
-    $this->configuration[self::ADDITIONAL] = $additional;
   }
 
   /**
@@ -250,9 +213,10 @@ class DigitalSignatureWebformHandler extends WebformHandlerBase {
    * {@inheritdoc}
    */
   public function preSave(WebformSubmissionInterface $webform_submission) {
-    $submissionState = $webform_submission->getWebform()->getSetting('results_disabled') ? WebformSubmissionInterface::STATE_COMPLETED : $webform_submission->getState();
-    $enabledStates = (array) ($this->configuration[self::ADDITIONAL][self::STATES] ?? NULL);
-    if (!in_array($submissionState, $enabledStates)) {
+    // Signing redirects the user to the signing flow, so it only makes sense
+    // on an actual submission. Drafts are skipped, and a locked submission is
+    // already signed (signing locks it).
+    if ($webform_submission->isDraft() || $webform_submission->isLocked()) {
       return;
     }
 
