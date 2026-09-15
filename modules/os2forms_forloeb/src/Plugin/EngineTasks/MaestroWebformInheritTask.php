@@ -151,15 +151,14 @@ class MaestroWebformInheritTask extends MaestroWebformTask {
       $webform = $submission->getWebform();
 
       // Only inherit values for elements on the target form.
-      $data = [];
-      foreach ($source->getData() as $key => $value) {
-        if ($webform->getElement($key)) {
-          $data[$key] = $value;
-        }
-      }
+      $inheritedData = array_filter(
+        $source->getData(),
+        static fn (string $key) => NULL !== $webform->getElement($key),
+        ARRAY_FILTER_USE_KEY
+      );
 
-      if ($data) {
-        $submission->setData($data + $submission->getData());
+      if ($inheritedData) {
+        $submission->setData($inheritedData + $submission->getData());
       }
     }
   }
@@ -175,20 +174,28 @@ class MaestroWebformInheritTask extends MaestroWebformTask {
    *   resolves the process submission in a similar way.
    */
   public static function getInheritedSourceSubmission(): ?WebformSubmissionInterface {
-    if ($queueID = self::getQueueIdFromRequest()) {
-      $templateTask = MaestroEngine::getTemplateTaskByQueueID($queueID);
-      if (self::isWebformTask($templateTask)) {
-        if ($inheritWebformUniqueId = ($templateTask['data'][self::INHERIT_WEBFORM_UNIQUE_ID] ?? NULL)) {
-          $processID = MaestroEngine::getProcessIdFromQueueId($queueID);
-          $entityIdentifier = MaestroEngine::getAllEntityIdentifiersForProcess($processID)[$inheritWebformUniqueId] ?? NULL;
-          if ('webform_submission' === ($entityIdentifier['entity_type'] ?? NULL)) {
-            return WebformSubmission::load($entityIdentifier['entity_id']);
-          }
-        }
-      }
+    $queueID = self::getQueueIdFromRequest();
+    if (NULL === $queueID) {
+      return NULL;
     }
 
-    return NULL;
+    $templateTask = MaestroEngine::getTemplateTaskByQueueID($queueID);
+    if (!self::isWebformTask($templateTask)) {
+      return NULL;
+    }
+
+    $inheritWebformUniqueId = $templateTask['data'][self::INHERIT_WEBFORM_UNIQUE_ID] ?? NULL;
+    if (!$inheritWebformUniqueId) {
+      return NULL;
+    }
+
+    $processID = MaestroEngine::getProcessIdFromQueueId($queueID);
+    $entityIdentifier = MaestroEngine::getAllEntityIdentifiersForProcess($processID)[$inheritWebformUniqueId] ?? NULL;
+    if ('webform_submission' !== ($entityIdentifier['entity_type'] ?? NULL)) {
+      return NULL;
+    }
+
+    return WebformSubmission::load($entityIdentifier['entity_id']);
   }
 
   /**

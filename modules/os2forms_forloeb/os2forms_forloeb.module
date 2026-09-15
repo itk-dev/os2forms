@@ -299,9 +299,7 @@ function os2forms_forloeb_preprocess_page(&$variables) {
  *
  * Uses the generic hook rather than hook_webform_submission_prepare_form()
  * because core invokes the generic hook first, and the inherited data should
- * be set early.
- *
- * @see \Drupal\Core\Entity\EntityForm::init()
+ * be set early (@see \Drupal\Core\Entity\EntityForm::init() for details).
  */
 function os2forms_forloeb_entity_prepare_form(EntityInterface $entity, string $operation, FormStateInterface $formState) {
   if ($entity instanceof WebformSubmissionInterface) {
