@@ -13,10 +13,10 @@ before starting to add changes. Use example [placed in the end of the page](#exa
 
 ## [Unreleased]
 
-- Moved digital signature configuration (which attachment to sign and the
-  signature validation text position) from the *OS2Forms Attachment* element
-  onto the *Digital Signature* webform handler. Includes an automatic
-  migration update hook for existing webforms.
+- [PR-353](https://github.com/OS2Forms/os2forms/pull/353)
+  - Moved `WebformInheritTask` data inheriting from
+  `hook_webform_submission_form_alter` to `hook_entity_prepare_form`.
+  - Set data on the submission.
 
 ## [5.1.0] 2026-06-03
 
