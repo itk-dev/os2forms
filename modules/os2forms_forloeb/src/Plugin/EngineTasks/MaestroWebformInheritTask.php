@@ -2,13 +2,12 @@
 
 namespace Drupal\os2forms_forloeb\Plugin\EngineTasks;
 
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\maestro\Engine\MaestroEngine;
 use Drupal\maestro_webform\Plugin\EngineTasks\MaestroWebformTask;
-use Drupal\webform\Entity\Webform;
 use Drupal\webform\Entity\WebformSubmission;
 use Drupal\webform\Utility\WebformArrayHelper;
+use Drupal\webform\WebformSubmissionInterface;
 
 /**
  * Maestro Webform Task Plugin for Multiple Submissions.
@@ -141,44 +140,62 @@ class MaestroWebformInheritTask extends MaestroWebformTask {
   }
 
   /**
-   * Implements hook_webform_submission_form_alter().
+   * Implements hook_entity_prepare_form() for webform submissions.
+   *
+   * Sets inherited data on the webform submission entity.
+   *
+   * @see \Drupal\webform\WebformSubmissionForm::populateElements()
    */
-  public static function webformSubmissionFormAlter(array &$form, FormStateInterface $formState, string $formId) {
-    // Only inherit values on the initial form load. This skip condition is the
-    // complement of webform's own prepopulate guard.
-    // @see \Drupal\webform\WebformSubmissionForm::buildForm()
-    if ($formState->isRebuilding() && !$formState->get('is_ajax_restart')) {
-      return;
-    }
+  public static function webformSubmissionPrepareForm(WebformSubmissionInterface $submission, string $operation, FormStateInterface $formState): void {
+    if ($source = self::getInheritedSourceSubmission()) {
+      $webform = $submission->getWebform();
 
-    // @todo Clean up and align with MaestroHelper::maestroZeroUserNotification().
-    if ($queueID = self::getQueueIdFromRequest()) {
-      $templateTask = MaestroEngine::getTemplateTaskByQueueID($queueID);
-      if (self::isWebformTask($templateTask)) {
-        if ($inheritWebformUniqueId = ($templateTask['data'][self::INHERIT_WEBFORM_UNIQUE_ID] ?? NULL)) {
-          $processID = MaestroEngine::getProcessIdFromQueueId($queueID);
-          $entityIdentifier = MaestroEngine::getAllEntityIdentifiersForProcess($processID)[$inheritWebformUniqueId] ?? NULL;
-          if ('webform_submission' === ($entityIdentifier['entity_type'] ?? NULL)) {
-            $submission = WebformSubmission::load($entityIdentifier['entity_id']);
-            $data = $submission->getData();
+      // Only inherit values for elements on the target form.
+      $inheritedData = array_filter(
+        $source->getData(),
+        static fn (string $key) => NULL !== $webform->getElement($key),
+        ARRAY_FILTER_USE_KEY
+      );
 
-            // The target element may be hidden inside sections or field groups
-            // on the target form. Therefore, we need to load that form and get
-            // element information to properly set default element values nested
-            // inside the form.
-            if ($targetWebform = Webform::load($form['#webform_id'] ?? NULL)) {
-              foreach ($data as $key => $value) {
-                if ($targetElement = $targetWebform->getElement($key)) {
-                  if ($element = &NestedArray::getValue($form['elements'], $targetElement['#webform_parents'])) {
-                    $element['#default_value'] = $value;
-                  }
-                }
-              }
-            }
-          }
-        }
+      if ($inheritedData) {
+        $submission->setData($inheritedData + $submission->getData());
       }
     }
+  }
+
+  /**
+   * Get the webform submission that the current request's task inherits from.
+   *
+   * Resolves the Maestro queue ID from the current request and, if the
+   * corresponding template task is a webform task configured to inherit
+   * another task's submission, loads that submission.
+   *
+   * @todo Align with MaestroHelper::maestroZeroUserNotification(), which
+   *   resolves the process submission in a similar way.
+   */
+  public static function getInheritedSourceSubmission(): ?WebformSubmissionInterface {
+    $queueID = self::getQueueIdFromRequest();
+    if (NULL === $queueID) {
+      return NULL;
+    }
+
+    $templateTask = MaestroEngine::getTemplateTaskByQueueID($queueID);
+    if (!self::isWebformTask($templateTask)) {
+      return NULL;
+    }
+
+    $inheritWebformUniqueId = $templateTask['data'][self::INHERIT_WEBFORM_UNIQUE_ID] ?? NULL;
+    if (!$inheritWebformUniqueId) {
+      return NULL;
+    }
+
+    $processID = MaestroEngine::getProcessIdFromQueueId($queueID);
+    $entityIdentifier = MaestroEngine::getAllEntityIdentifiersForProcess($processID)[$inheritWebformUniqueId] ?? NULL;
+    if ('webform_submission' !== ($entityIdentifier['entity_type'] ?? NULL)) {
+      return NULL;
+    }
+
+    return WebformSubmission::load($entityIdentifier['entity_id']);
   }
 
   /**
